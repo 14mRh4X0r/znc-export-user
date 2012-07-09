@@ -17,12 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-found=0
-while read -r line; do
-  fgrep -i "<user ${1:?Please specify a username}>" <<<$line >/dev/null && found=1
-  [ $found -ne 0 ] && echo $line
-  fgrep -i "</user>" >/dev/null <<<$line && found=0
-done <configs/znc.conf >$1.conf
+sed -nr "/<[uU]ser ${1:?Please specify a username}>/,/<\/[uU]ser>/p" configs/znc.conf >$1.conf
 
 cat >$1.sh << EOF
 #!/bin/bash
